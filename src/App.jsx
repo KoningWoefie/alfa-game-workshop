@@ -1,34 +1,40 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Box, useKeyboardControls } from '@react-three/drei'
+import { KeyboardControls } from '@react-three/drei'
+import { useRef } from 'react'
 import './App.css'
 
+function Stage()
+{
+  const boxRef = useRef()
+  useFrame(() => {
+    boxRef.current.rotation.y += 0.01
+    boxRef.current.rotation.x += 0.01
+  })
+  return (
+    <Box ref={boxRef} args={[1, 1, 1]}>
+      <meshStandardMaterial color="hotpink" />
+    </Box>
+  )
+};
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [show, setShow] = useState(0)
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <>
+      
+      <Canvas Camera={{
+        position: [0, 0, 5],
+        fov: 75,
+      }}>
+      
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Stage />
+      </Canvas>
+    </>
   )
 }
 
